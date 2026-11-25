@@ -61,6 +61,8 @@ npm run typecheck
 npm run build      # dist/
 ```
 
+The tests also load real files from Ogre's sample media, kept in [`tests/samples`](tests/samples/README.md) with their licences.
+
 It needs Node.js 22 or later.
 
 ## Licence
