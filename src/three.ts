@@ -202,7 +202,9 @@ export class OgreBuilder {
         const count = geometry.index ? geometry.index.count : geometry.getAttribute('position').count;
         this.stats.triangles += Math.floor(count / 3);
       }
-      object.name = mesh.subMeshes.length === 1 ? entity.name || stem(entity.meshFile) : sub.name;
+      // Submeshes without a name in the mesh are named after their material.
+      const unnamed = sub.name === String(index);
+      object.name = mesh.subMeshes.length === 1 ? entity.name || stem(entity.meshFile) : unnamed ? materialName || sub.name : sub.name;
       (object.userData as OgreUserData).ogre = { kind: 'submesh', name: entity.name, meshFile: entity.meshFile, subMesh: sub.name, material: materialName };
       this.stats.subMeshes++;
       objects.push(object);

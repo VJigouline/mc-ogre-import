@@ -199,6 +199,18 @@ describe('loadOgre', () => {
     expect(result.warnings).toContain('Material Nowhere was not found, so a plain white one is used');
   });
 
+  it('names submeshes after their material when the mesh has no submesh names', async () => {
+    const unnamed = binaryMesh({
+      shared: { count: 4, elements: [{ semantic: 1, type: 2, values: QUAD.positions }] },
+      subMeshes: [
+        { material: 'Brick', shared: true, indices: [0, 1, 2] },
+        { material: 'Glass', shared: true, indices: [0, 2, 3] },
+      ],
+    });
+    const result = await loadOgre([{ name: 'parts.mesh', data: unnamed }, { name: 'm.material', data: MATERIALS }], { textures: false });
+    expect(result.group.children[0]!.children.map((c) => c.name)).toEqual(['Brick', 'Glass']);
+  });
+
   it('reads files from a zip archive, stored or deflated', async () => {
     for (const deflate of [false, true]) {
       const archive = await zip(files(), deflate);
